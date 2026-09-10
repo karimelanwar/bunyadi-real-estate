@@ -51,7 +51,7 @@ export default async function HomePage() {
             <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-brand-100/60 blur-2xl" />
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] shadow-cardHover">
               <Image
-                src="/images/hero-agent.png"
+                src="/images/hero-agent.jpg"
                 alt="Bunyadi Real Estate agent"
                 fill
                 priority

@@ -240,9 +240,9 @@ public site only when you unpublish or delete it.
 
 ## Before you go live
 
-- **Replace the footer contact details** in `messages/en.json` (`footer.address`,
-  `footer.phone`, `footer.email`) — they currently hold placeholder text and
-  must be your real business details before real visitors see them.
+- **Double-check the footer contact details** in `messages/en.json`
+  (`footer.address`, `footer.phone`, `footer.email`) are correct before real
+  visitors see them.
 - **Change the admin password** if you used a placeholder value while testing,
   then run `npm run db:bootstrap` (or just redeploy with the new
   `ADMIN_PASSWORD` set — it runs automatically on boot).
