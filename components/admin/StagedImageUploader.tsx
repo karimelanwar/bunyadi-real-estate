@@ -129,7 +129,7 @@ export default function StagedImageUploader({
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={s.previewUrl} alt="" className="aspect-square w-full object-cover object-bottom" />
+              <img src={s.previewUrl} alt="" className="aspect-square w-full object-cover" />
 
               {index === 0 && (
                 <span className="absolute start-2 top-2 rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold text-white">

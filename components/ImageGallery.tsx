@@ -42,7 +42,7 @@ export default function ImageGallery({ images, alt }: { images: string[]; alt: s
           alt={total > 1 ? `${alt} — ${active + 1}/${total}` : alt}
           fill
           sizes="(min-width: 1024px) 66vw, 100vw"
-          className="object-cover object-bottom"
+          className="object-cover"
           priority
         />
 
@@ -88,7 +88,7 @@ export default function ImageGallery({ images, alt }: { images: string[]; alt: s
                 i === active ? "border-brand-600" : "border-transparent hover:border-brand-300"
               }`}
             >
-              <Image src={src} alt="" fill sizes="120px" className="object-cover object-bottom" />
+              <Image src={src} alt="" fill sizes="120px" className="object-cover" />
             </button>
           ))}
         </div>
