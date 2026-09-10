@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import Logo from "@/components/ui/Logo";
 
 const links = [
   { href: "/residential", key: "residential" },
@@ -35,15 +36,7 @@ export default function Navbar() {
         className="container-page flex h-20 items-center justify-between gap-4"
       >
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
-          <img
-            src="/logo.svg"
-            alt="Bunyadi Real Estate"
-            width={576}
-            height={100}
-            fetchPriority="high"
-            className="h-10 w-auto object-contain sm:h-11"
-          />
+          <Logo priority className="h-10 sm:h-11" />
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">

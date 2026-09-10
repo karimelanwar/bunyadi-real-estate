@@ -18,17 +18,21 @@ export function formatArea(areaSqm: number): string {
   return `${formatNumber(areaSqm)} sqm`;
 }
 
+// Shared by both directions so the prefix can never drift out of sync with
+// the pattern that parses it back.
+const REFERENCE_PREFIX = "BRE-";
+
 // The sequence backing this starts at 1001 (see the add_property_reference
 // migration), so this is purely cosmetic formatting, not an offset.
 export function formatReference(reference: number): string {
-  return `BRE-${reference}`;
+  return `${REFERENCE_PREFIX}${reference}`;
 }
 
 // Accepts a full "BRE-1042" reference or a bare "1042" and returns the
 // numeric part, or null if the string doesn't look like one at all — used to
 // let the admin search box match a reference as well as title/city.
 export function parseReference(value: string): number | null {
-  const match = value.trim().match(/^(?:BRE-)?(\d+)$/i);
+  const match = value.trim().match(new RegExp(`^(?:${REFERENCE_PREFIX})?(\\d+)$`, "i"));
   if (!match) return null;
   return Number(match[1]);
 }

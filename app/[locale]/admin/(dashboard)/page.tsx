@@ -5,6 +5,7 @@ import { formatPrice } from "@/lib/format";
 import { Link } from "@/i18n/navigation";
 import StatCard from "@/components/admin/StatCard";
 import StatusBadge from "@/components/admin/StatusBadge";
+import { buttonClass } from "@/components/ui/Button";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -45,10 +46,7 @@ export default async function AdminDashboardPage() {
       <div className="mt-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-bold text-brand-950">{t("recentProperties")}</h2>
-          <Link
-            href="/admin/properties/new"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-          >
+          <Link href="/admin/properties/new" className={buttonClass()}>
             + {t("addProperty")}
           </Link>
         </div>

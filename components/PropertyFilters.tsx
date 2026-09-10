@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { fieldControlClass, fieldSelectClass } from "@/components/ui/Field";
+import Button, { buttonClass } from "@/components/ui/Button";
 import type { PropertyCategory } from "@/lib/types";
 
 export interface PropertyFiltersProps {
@@ -117,16 +118,8 @@ export default async function PropertyFilters({
       </div>
 
       <div className="mt-4 flex items-center gap-2">
-        <button
-          type="submit"
-          className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-        >
-          {t("apply")}
-        </button>
-        <a
-          href="?"
-          className="inline-flex items-center justify-center rounded-lg border border-brand-300 bg-white px-5 py-2.5 text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50"
-        >
+        <Button type="submit">{t("apply")}</Button>
+        <a href="?" className={buttonClass({ variant: "secondary" })}>
           {t("reset")}
         </a>
       </div>

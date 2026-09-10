@@ -16,11 +16,12 @@ export function controlClass(hasError?: boolean) {
 // plain <input> at the same padding, so this strips it (`select-arrow`,
 // defined in globals.css) and draws a matching custom arrow — the box is
 // then exactly as tall as an input using fieldControlClass.
-export const fieldSelectClass = `${fieldControlClass} select-arrow pe-9`;
-export const fieldSelectErrorClass = `${fieldControlErrorClass} select-arrow pe-9`;
+const SELECT_ARROW = "select-arrow pe-9";
+
+export const fieldSelectClass = `${fieldControlClass} ${SELECT_ARROW}`;
 
 export function selectControlClass(hasError?: boolean) {
-  return hasError ? fieldSelectErrorClass : fieldSelectClass;
+  return `${controlClass(hasError)} ${SELECT_ARROW}`;
 }
 
 interface FieldProps {

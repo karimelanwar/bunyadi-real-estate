@@ -1,4 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import Logo from "@/components/ui/Logo";
+import { buttonClass } from "@/components/ui/Button";
 
 // Deliberately uses a plain <a> instead of next-intl's <Link>: this file
 // lives outside app/[locale]/layout.tsx (see the comment in app/layout.tsx
@@ -12,17 +14,13 @@ export default async function NotFound() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-white px-4 text-center">
-      {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
-      <img src="/logo.svg" alt="Bunyadi Real Estate" width={576} height={100} className="h-8 w-auto object-contain" />
+      <Logo className="h-8" />
       <div>
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-500">404</p>
         <h1 className="mt-2 text-3xl font-bold text-brand-950 sm:text-4xl">{t("title")}</h1>
         <p className="mt-3 max-w-md text-brand-600">{t("body")}</p>
       </div>
-      <a
-        href={`/${locale}`}
-        className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-      >
+      <a href={`/${locale}`} className={buttonClass({ size: "lg" })}>
         {t("cta")}
       </a>
     </div>

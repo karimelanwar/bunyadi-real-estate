@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import Logo from "@/components/ui/Logo";
 
 const navItems = [
   { href: "/admin", key: "dashboard", exact: true },
@@ -54,15 +55,7 @@ export default function AdminSidebar() {
   return (
     <>
       <header className="flex items-center justify-between border-b border-brand-800 bg-brand-950 px-4 py-3 lg:hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
-        <img
-          src="/logo.svg"
-          alt="Bunyadi Real Estate"
-          width={576}
-          height={100}
-          fetchPriority="high"
-          className="h-10 w-auto shrink-0 object-contain brightness-0 invert"
-        />
+        <Logo priority onDark className="h-10 shrink-0" />
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -91,15 +84,7 @@ export default function AdminSidebar() {
 
       <aside className="hidden w-72 shrink-0 flex-col bg-brand-950 lg:flex">
         <div className="flex h-20 items-center justify-center border-b border-brand-800 px-3">
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
-          <img
-            src="/logo.svg"
-            alt="Bunyadi Real Estate"
-            width={576}
-            height={100}
-            fetchPriority="high"
-            className="h-10 w-auto shrink-0 object-contain brightness-0 invert"
-          />
+          <Logo priority onDark className="h-10 shrink-0" />
         </div>
 
         <nav className="flex flex-1 flex-col gap-1 p-4">{linksMarkup}</nav>

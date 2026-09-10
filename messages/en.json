@@ -228,7 +228,6 @@
     "addProperty": "Add Property",
     "editProperty": "Edit Property",
     "manageProperties": "Manage Properties",
-    "searchProperties": "Search",
     "searchPropertiesPlaceholder": "Title, city, or reference...",
     "filterCategory": "Category",
     "filterStatus": "Status",

@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
+import { formatReference } from "@/lib/format";
 import type { InquiryStatus } from "@/lib/types";
 
 export interface InquiryRow {
@@ -11,7 +12,7 @@ export interface InquiryRow {
   phone: string;
   email: string | null;
   propertyTitle: string | null;
-  propertyReference: string | null;
+  propertyReference: number | null;
   message: string;
   status: InquiryStatus;
   dateFormatted: string;
@@ -103,7 +104,11 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
                   {inquiry.propertyTitle ? (
                     <>
                       <p>{inquiry.propertyTitle}</p>
-                      <p className="text-xs text-brand-500">{inquiry.propertyReference}</p>
+                      {inquiry.propertyReference !== null && (
+                        <p className="text-xs text-brand-500">
+                          {formatReference(inquiry.propertyReference)}
+                        </p>
+                      )}
                     </>
                   ) : (
                     "—"

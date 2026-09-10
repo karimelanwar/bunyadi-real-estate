@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import Logo from "@/components/ui/Logo";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -10,14 +11,7 @@ export default function Footer() {
     <footer className="border-t border-brand-50 bg-brand-950 text-brand-50">
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
-          <img
-            src="/logo.svg"
-            alt="Bunyadi Real Estate"
-            width={576}
-            height={100}
-            className="h-11 w-auto object-contain brightness-0 invert"
-          />
+          <Logo onDark className="h-11" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-100">
             {t("about")}
           </p>

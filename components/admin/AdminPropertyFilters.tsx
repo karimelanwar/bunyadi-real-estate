@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { fieldControlClass, fieldSelectClass } from "@/components/ui/Field";
+import Button, { buttonClass } from "@/components/ui/Button";
 import { AVAILABILITY_VALUES } from "@/lib/property-display";
 
 export default async function AdminPropertyFilters({
@@ -23,7 +24,7 @@ export default async function AdminPropertyFilters({
     >
       <div>
         <label htmlFor="search" className={labelClass}>
-          {t("searchProperties")}
+          {tCommon("search")}
         </label>
         <input
           id="search"
@@ -87,16 +88,8 @@ export default async function AdminPropertyFilters({
       </div>
 
       <div className="flex items-end gap-2">
-        <button
-          type="submit"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-        >
-          {tFilters("apply")}
-        </button>
-        <a
-          href="?"
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-300 px-5 py-2.5 text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50"
-        >
+        <Button type="submit">{tFilters("apply")}</Button>
+        <a href="?" className={buttonClass({ variant: "secondary" })}>
           {tFilters("reset")}
         </a>
       </div>

@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-sand-50 lg:flex-row">
+    <div className="flex min-h-screen flex-col bg-sand-50 lg:flex-row">
       <AdminSidebar />
       {/* min-w-0 is load-bearing: without it, a flex item can't shrink below
           its content's intrinsic width, so the wide tables on the

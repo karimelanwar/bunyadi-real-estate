@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import Button from "@/components/ui/Button";
 
 export default function SiteError({
   error,
@@ -20,13 +21,9 @@ export default function SiteError({
     <div className="container-page flex min-h-[50vh] flex-col items-center justify-center gap-4 py-16 text-center">
       <h1 className="text-2xl font-bold text-brand-950 sm:text-3xl">{t("somethingWentWrong")}</h1>
       <p className="max-w-md text-brand-700">{t("somethingWentWrongHint")}</p>
-      <button
-        type="button"
-        onClick={reset}
-        className="mt-2 inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-      >
+      <Button size="lg" onClick={reset} className="mt-2">
         {t("retry")}
-      </button>
+      </Button>
     </div>
   );
 }

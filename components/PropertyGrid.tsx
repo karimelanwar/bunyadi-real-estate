@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import PropertyCard from "./PropertyCard";
+import { buttonClass } from "@/components/ui/Button";
 import type { PropertyCardData } from "@/lib/types";
 
 export default async function PropertyGrid({
@@ -38,10 +39,7 @@ export default async function PropertyGrid({
           {hasActiveFilters ? t("noResultsHint") : t("noListingsYetHint")}
         </p>
         {hasActiveFilters && (
-          <a
-            href="?"
-            className="mt-1 inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-          >
+          <a href="?" className={buttonClass({ className: "mt-1" })}>
             {t("clearFilters")}
           </a>
         )}

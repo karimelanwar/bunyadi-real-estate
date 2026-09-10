@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import AdminPropertyFilters from "@/components/admin/AdminPropertyFilters";
 import AdminPropertiesTable from "@/components/admin/AdminPropertiesTable";
 import Pagination from "@/components/Pagination";
+import { buttonClass } from "@/components/ui/Button";
 import type { Availability, PropertyCategory, PropertyStatus } from "@/lib/types";
 import { AVAILABILITY_VALUES } from "@/lib/property-display";
 
@@ -45,10 +46,7 @@ export default async function AdminPropertiesPage({
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-brand-950">{t("manageProperties")}</h1>
-        <Link
-          href="/admin/properties/new"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-        >
+        <Link href="/admin/properties/new" className={buttonClass()}>
           + {t("addProperty")}
         </Link>
       </div>

@@ -37,7 +37,6 @@ yarn-error.log*
 /.qa
 /undefined
 
-
 # uploads (admin-uploaded property images; public/uploads/seed/* is
 # committed placeholder content and intentionally not ignored here)
 /storage/uploads/**

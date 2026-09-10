@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { buttonClass } from "@/components/ui/Button";
 
 // Sits inside the (site) layout so a bad property slug keeps the Navbar and
 // Footer instead of dropping the visitor onto a bare page.
@@ -20,17 +21,14 @@ export default async function SiteNotFound() {
       <p className="max-w-md text-brand-700">{t("body")}</p>
 
       <div className="mt-2 flex flex-wrap justify-center gap-3">
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-        >
+        <Link href="/" className={buttonClass({ size: "lg" })}>
           {t("cta")}
         </Link>
         {links.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className="inline-flex items-center justify-center rounded-lg border border-brand-300 px-6 py-3 text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50"
+            className={buttonClass({ variant: "secondary", size: "lg" })}
           >
             {link.label}
           </Link>

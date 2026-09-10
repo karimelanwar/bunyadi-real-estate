@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db";
 import AdminInquiriesTable, { type InquiryRow } from "@/components/admin/AdminInquiriesTable";
 import { fieldSelectClass } from "@/components/ui/Field";
 import Button from "@/components/ui/Button";
-import { formatReference } from "@/lib/format";
 import type { InquiryStatus } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Inquiries" };
@@ -42,7 +41,7 @@ export default async function AdminInquiriesPage({
     phone: inquiry.phone,
     email: inquiry.email,
     propertyTitle: inquiry.property?.title ?? null,
-    propertyReference: inquiry.property ? formatReference(inquiry.property.reference) : null,
+    propertyReference: inquiry.property?.reference ?? null,
     message: inquiry.message,
     status: inquiry.status,
     dateFormatted: dateFormatter.format(inquiry.createdAt),

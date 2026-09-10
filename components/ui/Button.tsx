@@ -17,25 +17,39 @@ const SIZES: Record<Size, string> = {
   lg: "px-6 py-3 text-sm",
 };
 
+const BASE =
+  "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60";
+
+// One button shape for the whole app. Previously five files each defined their
+// own padding/radius, so the primary CTA was a pill on some pages and a
+// rounded rect on others.
+//
+// Exported because a CTA is often a link, not a <button> — `Button` can't
+// render an <a>/next-intl <Link>, so those call sites take the class instead
+// of hand-copying the recipe (which is how the shapes drifted apart before).
+export function buttonClass({
+  variant = "primary",
+  size = "md",
+  className = "",
+}: {
+  variant?: Variant;
+  size?: Size;
+  className?: string;
+} = {}): string {
+  return `${BASE} ${VARIANTS[variant]} ${SIZES[size]} ${className}`;
+}
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
 }
 
-// One button shape for the whole app. Previously five files each defined their
-// own padding/radius, so the primary CTA was a pill on some pages and a
-// rounded rect on others.
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { variant = "primary", size = "md", className = "", type = "button", ...props },
   ref
 ) {
   return (
-    <button
-      ref={ref}
-      type={type}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
-      {...props}
-    />
+    <button ref={ref} type={type} className={buttonClass({ variant, size, className })} {...props} />
   );
 });
 

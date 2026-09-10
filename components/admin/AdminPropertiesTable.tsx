@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { formatPrice, formatReference } from "@/lib/format";
 import { StatusBadge } from "./StatusBadge";
-import Button from "@/components/ui/Button";
+import Button, { buttonClass } from "@/components/ui/Button";
 import { fieldSelectClass } from "@/components/ui/Field";
 import { AVAILABILITY_VALUES } from "@/lib/property-display";
 import type { Availability, PropertyCardData } from "@/lib/types";
@@ -157,7 +157,7 @@ export default function AdminPropertiesTable({ properties }: { properties: Prope
                     <div className="flex flex-nowrap items-center gap-2">
                       <Link
                         href={`/admin/properties/${property.id}/edit`}
-                        className="inline-flex items-center justify-center rounded-lg border border-brand-300 px-3 py-1.5 text-xs font-semibold text-brand-800 transition-colors hover:bg-brand-50"
+                        className={buttonClass({ variant: "secondary", size: "sm" })}
                       >
                         {tCommon("edit")}
                       </Link>
