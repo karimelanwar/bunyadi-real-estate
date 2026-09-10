@@ -1,0 +1,53 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# editor / tooling
+/.claude
+/.qa
+/undefined
+
+# Original source images. The served copies live in public/ — these root-level
+# originals are byte-identical duplicates and would ship ~1.2MB for nothing.
+/IMG_2467.png
+/logo.png
+/favicon.png
+
+# uploads (admin-uploaded property images; public/uploads/seed/* is
+# committed placeholder content and intentionally not ignored here)
+/storage/uploads/**
+!/storage/uploads/.gitkeep
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// DATABASE_URL should be Neon's pooled connection string (the one with
+// "-pooler" in the host) — the app talks to it on every request. DIRECT_URL
+// should be Neon's direct (unpooled) connection string — Prisma uses it only
+// for running migrations, which need a session-level connection that PgBouncer
+// transaction pooling doesn't provide. Both are given to you on the same Neon
+// project page. Locally, both can point at the same plain Postgres instance.
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum PropertyCategory {
+  RESIDENTIAL
+  COMMERCIAL
+  BUSINESS
+}
+
+// Whether the listing is live on the public site at all.
+enum PropertyStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// Where the listing is in the sales/lettings cycle. Deliberately separate from
+// PropertyStatus: a SOLD listing stays published and publicly reachable so its
+// URL keeps working and the agency keeps showing a track record.
+enum Availability {
+  AVAILABLE
+  UNDER_OFFER
+  SOLD
+  LET_AGREED
+}
+
+enum Tenure {
+  FREEHOLD
+  LEASEHOLD
+  SHARE_OF_FREEHOLD
+}
+
+enum InquiryStatus {
+  NEW
+  COMPLETED
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Admin")
+  createdAt    DateTime @default(now())
+}
+
+model Property {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  category     PropertyCategory
+  type         String
+  status       PropertyStatus   @default(DRAFT)
+  availability Availability     @default(AVAILABLE)
+  tenure       Tenure?
+
+  // Derived from `availability` (0 = still on the market, 1 = sold/let agreed).
+  // Persisted purely so SQL can sort sold stock to the end of the *whole*
+  // result set — sorting the page slice in JS would only reorder within a page.
+  // Always write it via availabilityRank() in lib/properties.ts.
+  availabilityRank Int @default(0)
+
+  title       String
+  description String
+
+  price    Float
+  currency String @default("GBP")
+
+  city    String
+  address String
+
+  bedrooms  Int?
+  bathrooms Int?
+  areaSqm   Float?
+  yearBuilt Int?
+
+  features String @default("[]")
+
+  featured Boolean @default(false)
+
+  images    PropertyImage[]
+  inquiries Inquiry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([status])
+  @@index([availability])
+  @@index([status, category])
+  @@index([status, availabilityRank])
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+  sortOrder  Int      @default(0)
+  isCover    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([propertyId])
+}
+
+model Inquiry {
+  id         String        @id @default(cuid())
+  propertyId String?
+  property   Property?     @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  name       String
+  phone      String
+  email      String?
+  message    String
+  status     InquiryStatus @default(NEW)
+  createdAt  DateTime      @default(now())
+
+  @@index([propertyId])
+  @@index([status])
+}
