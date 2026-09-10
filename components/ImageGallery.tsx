@@ -10,7 +10,7 @@ export default function ImageGallery({ images, alt }: { images: string[]; alt: s
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-video w-full items-center justify-center rounded-2xl bg-brand-100 px-4 text-center text-sm font-medium text-brand-700">
+      <div className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl bg-brand-100 px-4 text-center text-sm font-medium text-brand-700">
         {t("noImages")}
       </div>
     );
@@ -25,7 +25,7 @@ export default function ImageGallery({ images, alt }: { images: string[]; alt: s
   return (
     <div>
       <div
-        className="group relative aspect-video w-full overflow-hidden rounded-2xl bg-brand-100"
+        className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-brand-100"
         onKeyDown={(e) => {
           if (e.key === "ArrowRight") {
             e.preventDefault();
@@ -88,7 +88,7 @@ export default function ImageGallery({ images, alt }: { images: string[]; alt: s
                 i === active ? "border-brand-600" : "border-transparent hover:border-brand-300"
               }`}
             >
-              <Image src={src} alt="" fill sizes="120px" className="object-cover" />
+              <Image src={src} alt="" fill sizes="120px" className="object-cover object-top" />
             </button>
           ))}
         </div>

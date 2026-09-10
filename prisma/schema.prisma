@@ -58,6 +58,13 @@ model Admin {
 model Property {
   id          String           @id @default(cuid())
   slug        String           @unique
+
+  // Short, sequential, human-quotable ID shown to customers (formatted as
+  // e.g. "BRE-1001" — see formatReference() in lib/format.ts). Deliberately
+  // separate from `id` (a cuid, unusable over the phone) and `slug` (SEO
+  // text, not memorable). The starting sequence value is set in the
+  // migration so the first property reads BRE-1001, not BRE-1.
+  reference    Int              @unique @default(autoincrement())
   category     PropertyCategory
   type         String
   status       PropertyStatus   @default(DRAFT)

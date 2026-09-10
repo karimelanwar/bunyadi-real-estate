@@ -11,6 +11,7 @@ export interface InquiryRow {
   phone: string;
   email: string | null;
   propertyTitle: string | null;
+  propertyReference: string | null;
   message: string;
   status: InquiryStatus;
   dateFormatted: string;
@@ -98,7 +99,16 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
                   {inquiry.phone}
                 </td>
                 <td className="px-4 py-3 text-brand-600">{inquiry.email ?? "—"}</td>
-                <td className="px-4 py-3 text-brand-600">{inquiry.propertyTitle ?? "—"}</td>
+                <td className="px-4 py-3 text-brand-600">
+                  {inquiry.propertyTitle ? (
+                    <>
+                      <p>{inquiry.propertyTitle}</p>
+                      <p className="text-xs text-brand-500">{inquiry.propertyReference}</p>
+                    </>
+                  ) : (
+                    "—"
+                  )}
+                </td>
                 <td className="max-w-xs px-4 py-3 text-brand-600">
                   <p className="line-clamp-3">{inquiry.message}</p>
                 </td>

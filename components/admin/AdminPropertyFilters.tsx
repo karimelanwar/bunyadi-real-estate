@@ -29,7 +29,7 @@ export default async function AdminPropertyFilters({
           id="search"
           name="search"
           defaultValue={values.search}
-          placeholder={t("searchProperties")}
+          placeholder={t("searchPropertiesPlaceholder")}
           className={fieldControlClass}
         />
       </div>

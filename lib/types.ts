@@ -17,6 +17,7 @@ export type PropertyWithImages = Property & {
 export interface PropertyCardData {
   id: string;
   slug: string;
+  reference: number;
   category: PropertyCategory;
   type: string;
   status: PropertyStatus;

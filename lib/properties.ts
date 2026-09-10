@@ -1,6 +1,7 @@
 import { prisma } from "./db";
 import type { Prisma, PropertyCategory, PropertyStatus, Availability } from "@prisma/client";
 import type { PropertyWithImages, PropertyCardData, PropertyDetailData } from "./types";
+import { parseReference } from "./format";
 
 // A listing is publicly visible based on `status` alone. `availability` never
 // hides anything — a SOLD or LET_AGREED listing stays on the site (and keeps
@@ -36,6 +37,7 @@ export function toCardData(property: PropertyWithImages): PropertyCardData {
   return {
     id: property.id,
     slug: property.slug,
+    reference: property.reference,
     category: property.category,
     type: property.type,
     status: property.status,
@@ -115,11 +117,13 @@ export async function getProperties(filters: PropertyFilters) {
   }
 
   if (search) {
+    const referenceMatch = parseReference(search);
     where.AND = [
       {
         OR: [
           { title: { contains: search, mode: "insensitive" } },
           { city: { contains: search, mode: "insensitive" } },
+          ...(referenceMatch !== null ? [{ reference: referenceMatch }] : []),
         ],
       },
     ];

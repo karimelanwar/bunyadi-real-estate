@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, formatReference } from "@/lib/format";
 import { StatusBadge } from "./StatusBadge";
 import Button from "@/components/ui/Button";
 import { fieldSelectClass } from "@/components/ui/Field";
@@ -120,7 +120,9 @@ export default function AdminPropertiesTable({ properties }: { properties: Prope
                       </div>
                       <div>
                         <p className="line-clamp-1 font-semibold text-brand-900">{property.title}</p>
-                        <p className="text-xs text-brand-600">{property.location}</p>
+                        <p className="text-xs text-brand-600">
+                          {property.location} · {formatReference(property.reference)}
+                        </p>
                       </div>
                     </div>
                   </td>

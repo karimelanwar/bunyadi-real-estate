@@ -8,7 +8,7 @@ import {
   toDetailData,
   toCardData,
 } from "@/lib/properties";
-import { formatPrice, formatNumber } from "@/lib/format";
+import { formatPrice, formatNumber, formatReference } from "@/lib/format";
 import Badge from "@/components/ui/Badge";
 import {
   AVAILABILITY_TONE,
@@ -199,7 +199,7 @@ export default async function PropertyDetailPage({
                 </p>
               )}
               <p className="mt-1 text-xs text-brand-600">
-                {t("reference")}: {detail.id.slice(-8).toUpperCase()}
+                {t("reference")}: {formatReference(detail.reference)}
               </p>
             </div>
 
