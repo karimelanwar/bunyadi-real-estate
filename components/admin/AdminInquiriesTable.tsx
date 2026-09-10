@@ -204,14 +204,19 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
             <div className="flex items-start justify-between gap-4">
               <div>
                 {/* tabIndex + ref so it can take initial focus programmatically
-                    (see the effect above) without joining the tab order;
-                    outline-none because a focus ring only matters here for
-                    where focus lands, not as an interactive affordance. */}
+                    (see the effect above) without joining the tab order. The
+                    `!` on outline-none forces !important: plain outline-none
+                    and globals.css's `:focus-visible` rule have equal
+                    specificity, so without it, whichever is later in the
+                    stylesheet wins the cascade — and did, invisibly, since
+                    Chromium doesn't apply :focus-visible to a script-focused
+                    tabindex="-1" heading but Safari does, showing the green
+                    ring right on the name. !important can't lose that tie. */}
                 <h2
                   ref={titleRef}
                   id="inquiry-dialog-title"
                   tabIndex={-1}
-                  className="text-lg font-bold text-brand-950 outline-none"
+                  className="text-lg font-bold text-brand-950 !outline-none"
                 >
                   {selected.name}
                 </h2>
