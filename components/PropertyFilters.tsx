@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { fieldControlClass } from "@/components/ui/Field";
+import { fieldControlClass, fieldSelectClass } from "@/components/ui/Field";
 import type { PropertyCategory } from "@/lib/types";
 
 export interface PropertyFiltersProps {
@@ -87,7 +87,7 @@ export default async function PropertyFilters({
               id="bedrooms"
               name="bedrooms"
               defaultValue={values.bedrooms ?? ""}
-              className={fieldControlClass}
+              className={fieldSelectClass}
             >
               <option value="">{t("bedroomsAny")}</option>
               {[1, 2, 3, 4, 5].map((n) => (
@@ -107,7 +107,7 @@ export default async function PropertyFilters({
             id="sort"
             name="sort"
             defaultValue={values.sort ?? "newest"}
-            className={fieldControlClass}
+            className={fieldSelectClass}
           >
             <option value="newest">{tListing("sortNewest")}</option>
             <option value="price_asc">{tListing("sortPriceLow")}</option>

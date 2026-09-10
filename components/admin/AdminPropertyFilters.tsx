@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { fieldControlClass } from "@/components/ui/Field";
+import { fieldControlClass, fieldSelectClass } from "@/components/ui/Field";
 import { AVAILABILITY_VALUES } from "@/lib/property-display";
 
 export default async function AdminPropertyFilters({
@@ -42,7 +42,7 @@ export default async function AdminPropertyFilters({
           id="category"
           name="category"
           defaultValue={values.category ?? ""}
-          className={fieldControlClass}
+          className={fieldSelectClass}
         >
           <option value="">{tCommon("all")}</option>
           <option value="RESIDENTIAL">{tCat("RESIDENTIAL")}</option>
@@ -59,7 +59,7 @@ export default async function AdminPropertyFilters({
           id="status"
           name="status"
           defaultValue={values.status ?? ""}
-          className={fieldControlClass}
+          className={fieldSelectClass}
         >
           <option value="">{tCommon("all")}</option>
           <option value="PUBLISHED">{tCommon("published")}</option>
@@ -75,7 +75,7 @@ export default async function AdminPropertyFilters({
           id="availability"
           name="availability"
           defaultValue={values.availability ?? ""}
-          className={fieldControlClass}
+          className={fieldSelectClass}
         >
           <option value="">{tCommon("all")}</option>
           {AVAILABILITY_VALUES.map((value) => (

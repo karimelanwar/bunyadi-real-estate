@@ -11,7 +11,7 @@ import ImageUploader from "./ImageUploader";
 import StagedImageUploader from "./StagedImageUploader";
 import WizardSteps, { type WizardStep } from "./WizardSteps";
 import Button from "@/components/ui/Button";
-import Field, { controlClass } from "@/components/ui/Field";
+import Field, { controlClass, selectControlClass } from "@/components/ui/Field";
 
 interface Props {
   mode: "create" | "edit";
@@ -293,7 +293,7 @@ export default function PropertyForm({ mode, property }: Props) {
           id="category"
           value={values.category}
           onChange={(e) => set("category", e.target.value)}
-          className={controlClass(!!errors.category)}
+          className={selectControlClass(!!errors.category)}
         >
           <option value="RESIDENTIAL">{tCat("RESIDENTIAL")}</option>
           <option value="COMMERCIAL">{tCat("COMMERCIAL")}</option>
@@ -369,7 +369,7 @@ export default function PropertyForm({ mode, property }: Props) {
           id="tenure"
           value={values.tenure}
           onChange={(e) => set("tenure", e.target.value)}
-          className={controlClass(!!errors.tenure)}
+          className={selectControlClass(!!errors.tenure)}
         >
           <option value="">{t("tenureNone")}</option>
           {TENURE_VALUES.map((value) => (
@@ -479,7 +479,7 @@ export default function PropertyForm({ mode, property }: Props) {
           id="status"
           value={values.status}
           onChange={(e) => set("status", e.target.value)}
-          className={controlClass(!!errors.status)}
+          className={selectControlClass(!!errors.status)}
         >
           <option value="DRAFT">{tCommon("draft")}</option>
           <option value="PUBLISHED">{tCommon("published")}</option>
@@ -496,7 +496,7 @@ export default function PropertyForm({ mode, property }: Props) {
           id="availability"
           value={values.availability}
           onChange={(e) => set("availability", e.target.value)}
-          className={controlClass(!!errors.availability)}
+          className={selectControlClass(!!errors.availability)}
         >
           {AVAILABILITY_VALUES.map((value) => (
             <option key={value} value={value}>

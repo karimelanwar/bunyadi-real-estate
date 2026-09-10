@@ -12,10 +12,10 @@ export default function AdminLoginPage() {
           <Image
             src="/logo.png"
             alt="Bunyadi Real Estate"
-            width={288}
-            height={66}
+            width={318}
+            height={56}
             priority
-            className="h-9 w-auto shrink-0 object-contain"
+            className="h-14 w-auto shrink-0 object-contain"
           />
         </div>
         <LoginForm />

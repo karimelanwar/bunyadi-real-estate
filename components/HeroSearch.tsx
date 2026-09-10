@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import Button from "@/components/ui/Button";
-import { fieldControlClass } from "@/components/ui/Field";
+import { fieldControlClass, fieldSelectClass } from "@/components/ui/Field";
 
 const CATEGORY_PATHS = {
   RESIDENTIAL: "/residential",
@@ -49,7 +49,7 @@ export default function HeroSearch() {
           name="category"
           value={category}
           onChange={(e) => setCategory(e.target.value as keyof typeof CATEGORY_PATHS)}
-          className={fieldControlClass}
+          className={fieldSelectClass}
         >
           {Object.keys(CATEGORY_PATHS).map((key) => (
             <option key={key} value={key}>

@@ -14,9 +14,9 @@ export default function Footer() {
           <Image
             src="/logo.png"
             alt="Bunyadi Real Estate"
-            width={384}
+            width={500}
             height={88}
-            className="h-11 w-auto object-contain brightness-0 invert"
+            className="h-12 w-auto object-contain brightness-0 invert"
           />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-100">
             {t("about")}

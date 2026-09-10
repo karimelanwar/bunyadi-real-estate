@@ -7,7 +7,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/format";
 import { StatusBadge } from "./StatusBadge";
 import Button from "@/components/ui/Button";
-import { fieldControlClass } from "@/components/ui/Field";
+import { fieldSelectClass } from "@/components/ui/Field";
 import { AVAILABILITY_VALUES } from "@/lib/property-display";
 import type { Availability, PropertyCardData } from "@/lib/types";
 
@@ -142,7 +142,7 @@ export default function AdminPropertiesTable({ properties }: { properties: Prope
                       onChange={(e) =>
                         changeAvailability(property, e.target.value as Availability)
                       }
-                      className={`${fieldControlClass} min-w-[9.5rem] py-1.5 text-xs`}
+                      className={`${fieldSelectClass} min-w-[9.5rem] py-1.5 text-xs`}
                     >
                       {AVAILABILITY_VALUES.map((value) => (
                         <option key={value} value={value}>

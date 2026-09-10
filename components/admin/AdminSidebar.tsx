@@ -58,10 +58,10 @@ export default function AdminSidebar() {
         <Image
           src="/logo.png"
           alt="Bunyadi Real Estate"
-          width={288}
+          width={375}
           height={66}
           priority
-          className="h-8 w-auto shrink-0 object-contain brightness-0 invert"
+          className="h-11 w-auto shrink-0 object-contain brightness-0 invert"
         />
         <button
           type="button"
@@ -90,14 +90,14 @@ export default function AdminSidebar() {
       )}
 
       <aside className="hidden w-72 shrink-0 flex-col bg-brand-950 lg:flex">
-        <div className="flex h-20 items-center justify-center border-b border-brand-800 px-5">
+        <div className="flex h-20 items-center justify-center border-b border-brand-800 px-3">
           <Image
             src="/logo.png"
             alt="Bunyadi Real Estate"
-            width={240}
-            height={55}
+            width={250}
+            height={44}
             priority
-            className="h-12 w-auto shrink-0 object-contain brightness-0 invert"
+            className="h-11 w-auto shrink-0 object-contain brightness-0 invert"
           />
         </div>
 

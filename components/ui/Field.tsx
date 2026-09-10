@@ -12,6 +12,17 @@ export function controlClass(hasError?: boolean) {
   return hasError ? fieldControlErrorClass : fieldControlClass;
 }
 
+// For <select> only. A native select's own chrome doesn't line up with a
+// plain <input> at the same padding, so this strips it (`select-arrow`,
+// defined in globals.css) and draws a matching custom arrow — the box is
+// then exactly as tall as an input using fieldControlClass.
+export const fieldSelectClass = `${fieldControlClass} select-arrow pe-9`;
+export const fieldSelectErrorClass = `${fieldControlErrorClass} select-arrow pe-9`;
+
+export function selectControlClass(hasError?: boolean) {
+  return hasError ? fieldSelectErrorClass : fieldSelectClass;
+}
+
 interface FieldProps {
   /** Must match the `id` of the control rendered as a child. */
   htmlFor: string;

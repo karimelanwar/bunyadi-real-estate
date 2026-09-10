@@ -16,6 +16,22 @@ body {
   .container-page {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
+
+  /* Native <select> chrome (the built-in arrow) has its own baked-in sizing
+     that doesn't line up with a plain <input> even when both share the exact
+     same padding — this strips that chrome and draws our own arrow so a
+     select's box is exactly as tall as a text input's. */
+  .select-arrow {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23025636'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.25a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    background-size: 1rem;
+  }
+
+  [dir="rtl"] .select-arrow {
+    background-position: left 0.65rem center;
+  }
 }
 
 /* Smooth focus rings that match the brand */

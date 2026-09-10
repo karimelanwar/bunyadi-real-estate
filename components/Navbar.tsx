@@ -39,10 +39,10 @@ export default function Navbar() {
           <Image
             src="/logo.png"
             alt="Bunyadi Real Estate"
-            width={384}
+            width={500}
             height={88}
             priority
-            className="h-10 w-auto object-contain sm:h-11"
+            className="h-11 w-auto object-contain sm:h-12"
           />
         </Link>
 

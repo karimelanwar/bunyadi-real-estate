@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import AdminInquiriesTable, { type InquiryRow } from "@/components/admin/AdminInquiriesTable";
-import { fieldControlClass } from "@/components/ui/Field";
+import { fieldSelectClass } from "@/components/ui/Field";
 import Button from "@/components/ui/Button";
 import type { InquiryStatus } from "@/lib/types";
 
@@ -54,7 +54,7 @@ export default async function AdminInquiriesPage({
           <select
             name="status"
             defaultValue={sp.status ?? ""}
-            className={`${fieldControlClass} w-auto`}
+            className={`${fieldSelectClass} w-auto`}
           >
             <option value="">{tCommon("all")}</option>
             <option value="NEW">{tTable("new")}</option>
