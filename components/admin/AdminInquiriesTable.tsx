@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { formatReference } from "@/lib/format";
@@ -19,6 +19,8 @@ export interface InquiryRow {
   dateFormatted: string;
 }
 
+const LABEL = "text-xs font-semibold uppercase tracking-wide text-brand-600";
+
 export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryRow[] }) {
   const t = useTranslations("admin.inquiriesTable");
   const tCommon = useTranslations("common");
@@ -26,9 +28,14 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
   const router = useRouter();
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<InquiryRow | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  // Derived, not stored: after router.refresh() the dialog picks up the new
+  // status on its own, and a deleted inquiry simply stops resolving — which
+  // closes the dialog via the effect below.
+  const selected = inquiries.find((i) => i.id === selectedId) ?? null;
 
   // showModal() (rather than the `open` attribute) is what gets us Escape to
   // close, focus containment, and an inert background for free.
@@ -39,57 +46,56 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
     if (!selected && dialog.open) dialog.close();
   }, [selected]);
 
-  async function mutate(id: string, run: () => Promise<Response>): Promise<boolean> {
+  async function mutate(id: string, run: () => Promise<Response>) {
     setPendingId(id);
     setError(null);
     try {
       const res = await run();
       if (!res.ok) {
         setError(res.status === 401 ? tAdmin("sessionExpired") : tAdmin("actionFailed"));
-        return false;
+        return;
       }
       startTransition(() => router.refresh());
-      return true;
     } catch {
       setError(tAdmin("actionFailed"));
-      return false;
     } finally {
       setPendingId(null);
     }
   }
 
-  async function toggleStatus(inquiry: InquiryRow) {
-    const nextStatus: InquiryStatus = inquiry.status === "COMPLETED" ? "NEW" : "COMPLETED";
-    const ok = await mutate(inquiry.id, () =>
+  function toggleStatus(inquiry: InquiryRow) {
+    return mutate(inquiry.id, () =>
       fetch(`/api/admin/inquiries/${inquiry.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatus }),
+        body: JSON.stringify({ status: inquiry.status === "COMPLETED" ? "NEW" : "COMPLETED" }),
       })
     );
-    // Keep the open dialog in step with the row behind it.
-    if (ok) {
-      setSelected((prev) => (prev && prev.id === inquiry.id ? { ...prev, status: nextStatus } : prev));
-    }
   }
 
-  async function handleDelete(id: string) {
+  function handleDelete(id: string) {
     if (!window.confirm(t("confirmDelete"))) return;
-    const ok = await mutate(id, () => fetch(`/api/admin/inquiries/${id}`, { method: "DELETE" }));
-    if (ok) setSelected((prev) => (prev?.id === id ? null : prev));
+    return mutate(id, () => fetch(`/api/admin/inquiries/${id}`, { method: "DELETE" }));
   }
 
-  function statusBadge(status: InquiryStatus) {
+  function StatusBadge({ status }: { status: InquiryStatus }) {
     const completed = status === "COMPLETED";
     return (
       <span
-        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
+        className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${
           completed ? "bg-brand-50 text-brand-700" : "bg-amber-50 text-amber-700"
         }`}
       >
         {completed ? t("completed") : t("new")}
       </span>
     );
+  }
+
+  function propertyLabel(inquiry: InquiryRow) {
+    if (!inquiry.propertyTitle) return "—";
+    return inquiry.propertyReference === null
+      ? inquiry.propertyTitle
+      : `${inquiry.propertyTitle} · ${formatReference(inquiry.propertyReference)}`;
   }
 
   const errorBanner = error && (
@@ -110,100 +116,66 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
     <div className="space-y-3">
       {errorBanner}
 
-      {/* See AdminPropertiesTable: `relative` keeps absolutely positioned
-          descendants inside the scroll container. */}
-      <div className="relative overflow-x-auto rounded-2xl border border-brand-100 bg-white shadow-card">
-        <table className="w-full min-w-[840px] text-start text-sm">
+      {/* A deliberately short list: phone, email, the full message and the
+          mark-complete/delete actions all live in the dialog instead, so this
+          stays scannable and fits a phone without sideways scrolling. Property
+          and date drop away on narrower screens. */}
+      <div className="relative overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-card">
+        <table className="w-full text-start text-sm">
           <thead className="bg-brand-50/60 text-xs uppercase tracking-wide text-brand-700">
             <tr>
-              <th className="px-4 py-3 text-start font-semibold">{t("name")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{t("phone")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{t("email")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{t("property")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{t("message")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{t("date")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{tCommon("status")}</th>
-              <th className="px-4 py-3 text-start font-semibold">{tCommon("actions")}</th>
+              <th className="px-3 py-3 sm:px-4 text-start font-semibold">{t("name")}</th>
+              <th className="hidden px-3 py-3 sm:px-4 text-start font-semibold lg:table-cell">
+                {t("property")}
+              </th>
+              <th className="hidden px-3 py-3 sm:px-4 text-start font-semibold sm:table-cell">
+                {t("date")}
+              </th>
+              <th className="px-3 py-3 sm:px-4 text-start font-semibold">{tCommon("status")}</th>
+              {/* aria-label rather than an sr-only span: sr-only is
+                  position:absolute and has a habit of escaping table
+                  containers and widening the page. */}
+              <th aria-label={tCommon("actions")} className="px-3 py-3 sm:px-4" />
             </tr>
           </thead>
           <tbody className="divide-y divide-brand-100">
-            {inquiries.map((inquiry) => {
-              const busy = pendingId === inquiry.id;
-              return (
-                <tr
-                  key={inquiry.id}
-                  onClick={() => setSelected(inquiry)}
-                  className={`cursor-pointer hover:bg-brand-50/40 ${busy ? "opacity-50" : ""}`}
-                >
-                  <td className="px-4 py-3">
-                    {/* The row is clickable for convenience, but the name is a
-                        real button so the dialog is reachable by keyboard. */}
-                    <button
-                      type="button"
-                      className="whitespace-nowrap rounded text-start font-semibold text-brand-900 hover:underline"
-                    >
-                      {inquiry.name}
-                    </button>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-brand-600" dir="ltr">
-                    {inquiry.phone}
-                  </td>
-                  <td className="px-4 py-3 text-brand-600">
-                    <span className="line-clamp-1 break-all">{inquiry.email ?? "—"}</span>
-                  </td>
-                  <td className="px-4 py-3 text-brand-600">
-                    {inquiry.propertyTitle ? (
-                      <span className="line-clamp-1">
-                        {inquiry.propertyTitle}
-                        {inquiry.propertyReference !== null && (
-                          <span className="text-brand-500">
-                            {" · "}
-                            {formatReference(inquiry.propertyReference)}
-                          </span>
-                        )}
-                      </span>
-                    ) : (
-                      "—"
-                    )}
-                  </td>
-                  <td className="max-w-[16rem] px-4 py-3 text-brand-600">
-                    {/* One line only — the full text lives in the dialog, so
-                        every row keeps the same height. */}
-                    <span className="line-clamp-1">{inquiry.message}</span>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-brand-500">
-                    {inquiry.dateFormatted}
-                  </td>
-                  <td className="px-4 py-3">{statusBadge(inquiry.status)}</td>
-                  <td className="px-4 py-3">
-                    {/* stopPropagation so the row's open-dialog click doesn't
-                        also fire when acting on a row. */}
-                    <div
-                      className="flex flex-nowrap items-center gap-2"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        disabled={busy}
-                        onClick={() => toggleStatus(inquiry)}
-                        className="whitespace-nowrap"
-                      >
-                        {inquiry.status === "COMPLETED" ? t("markNew") : t("markComplete")}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="danger"
-                        disabled={busy}
-                        onClick={() => handleDelete(inquiry.id)}
-                      >
-                        {tCommon("delete")}
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {inquiries.map((inquiry) => (
+              <tr
+                key={inquiry.id}
+                onClick={() => setSelectedId(inquiry.id)}
+                className={`cursor-pointer hover:bg-brand-50/40 ${
+                  pendingId === inquiry.id ? "opacity-50" : ""
+                }`}
+              >
+                <td className="px-3 py-3 sm:px-4">
+                  <p className="line-clamp-1 font-semibold text-brand-900">{inquiry.name}</p>
+                  {/* A preview so the list is triageable without opening each
+                      one; the date follows here where its column is hidden. */}
+                  <p className="line-clamp-1 text-brand-600">{inquiry.message}</p>
+                  <p className="text-xs text-brand-500 sm:hidden">{inquiry.dateFormatted}</p>
+                </td>
+                <td className="hidden max-w-[18rem] px-3 py-3 sm:px-4 text-brand-600 lg:table-cell">
+                  <span className="line-clamp-1">{propertyLabel(inquiry)}</span>
+                </td>
+                <td className="hidden whitespace-nowrap px-3 py-3 sm:px-4 text-brand-500 sm:table-cell">
+                  {inquiry.dateFormatted}
+                </td>
+                <td className="px-3 py-3 sm:px-4">
+                  <StatusBadge status={inquiry.status} />
+                </td>
+                <td className="px-3 py-3 sm:px-4 text-end">
+                  {/* The row is clickable too, but an explicit button makes
+                      that discoverable and gives keyboard users a target. */}
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => setSelectedId(inquiry.id)}
+                  >
+                    {tCommon("view")}
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -211,11 +183,11 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
       <dialog
         ref={dialogRef}
         aria-labelledby="inquiry-dialog-title"
-        onClose={() => setSelected(null)}
-        // A click landing on the dialog itself (rather than the panel inside
-        // it) is a backdrop click.
+        onClose={() => setSelectedId(null)}
+        // A click landing on the dialog itself, rather than the panel inside
+        // it, is a backdrop click.
         onClick={(e) => {
-          if (e.target === dialogRef.current) setSelected(null);
+          if (e.target === dialogRef.current) setSelectedId(null);
         }}
         className="w-[min(34rem,calc(100vw-2rem))] rounded-2xl border border-brand-100 bg-white p-0 text-brand-900 shadow-cardHover backdrop:bg-brand-950/50"
       >
@@ -228,62 +200,37 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
                 </h2>
                 <p className="mt-0.5 text-xs text-brand-500">{selected.dateFormatted}</p>
               </div>
-              {statusBadge(selected.status)}
+              <StatusBadge status={selected.status} />
             </div>
 
             <dl className="grid grid-cols-1 gap-3 border-y border-brand-100 py-4 text-sm sm:grid-cols-2">
-              <div>
-                <dt className="text-xs font-semibold uppercase tracking-wide text-brand-600">
-                  {t("phone")}
-                </dt>
-                <dd className="mt-0.5">
-                  <a href={`tel:${selected.phone.replace(/[^+\d]/g, "")}`} className="hover:underline" dir="ltr">
-                    {selected.phone}
+              <Detail label={t("phone")}>
+                <a
+                  href={`tel:${selected.phone.replace(/[^+\d]/g, "")}`}
+                  className="hover:underline"
+                  dir="ltr"
+                >
+                  {selected.phone}
+                </a>
+              </Detail>
+
+              <Detail label={t("email")} className="min-w-0 break-words">
+                {selected.email ? (
+                  <a href={`mailto:${selected.email}`} className="hover:underline">
+                    {selected.email}
                   </a>
-                </dd>
-              </div>
+                ) : (
+                  "—"
+                )}
+              </Detail>
 
-              <div className="min-w-0">
-                <dt className="text-xs font-semibold uppercase tracking-wide text-brand-600">
-                  {t("email")}
-                </dt>
-                <dd className="mt-0.5 break-words">
-                  {selected.email ? (
-                    <a href={`mailto:${selected.email}`} className="hover:underline">
-                      {selected.email}
-                    </a>
-                  ) : (
-                    "—"
-                  )}
-                </dd>
-              </div>
-
-              <div className="sm:col-span-2">
-                <dt className="text-xs font-semibold uppercase tracking-wide text-brand-600">
-                  {t("property")}
-                </dt>
-                <dd className="mt-0.5">
-                  {selected.propertyTitle ? (
-                    <>
-                      {selected.propertyTitle}
-                      {selected.propertyReference !== null && (
-                        <span className="text-brand-500">
-                          {" · "}
-                          {formatReference(selected.propertyReference)}
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    "—"
-                  )}
-                </dd>
-              </div>
+              <Detail label={t("property")} className="sm:col-span-2">
+                {propertyLabel(selected)}
+              </Detail>
             </dl>
 
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-brand-600">
-                {t("message")}
-              </h3>
+              <h3 className={LABEL}>{t("message")}</h3>
               <p className="mt-1.5 max-h-64 overflow-y-auto whitespace-pre-line leading-relaxed text-brand-700">
                 {selected.message}
               </p>
@@ -294,27 +241,44 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
             <div className="flex flex-wrap items-center justify-end gap-2">
               <Button
                 size="sm"
-                variant="secondary"
-                disabled={pendingId === selected.id}
-                onClick={() => toggleStatus(selected)}
-              >
-                {selected.status === "COMPLETED" ? t("markNew") : t("markComplete")}
-              </Button>
-              <Button
-                size="sm"
                 variant="danger"
                 disabled={pendingId === selected.id}
                 onClick={() => handleDelete(selected.id)}
               >
                 {tCommon("delete")}
               </Button>
-              <Button size="sm" variant="ghost" onClick={() => setSelected(null)}>
+              <Button size="sm" variant="ghost" onClick={() => setSelectedId(null)}>
                 {tCommon("close")}
+              </Button>
+              <Button
+                size="sm"
+                disabled={pendingId === selected.id}
+                onClick={() => toggleStatus(selected)}
+                className="whitespace-nowrap"
+              >
+                {selected.status === "COMPLETED" ? t("markNew") : t("markComplete")}
               </Button>
             </div>
           </div>
         )}
       </dialog>
+    </div>
+  );
+}
+
+function Detail({
+  label,
+  className = "",
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <dt className={LABEL}>{label}</dt>
+      <dd className="mt-0.5">{children}</dd>
     </div>
   );
 }

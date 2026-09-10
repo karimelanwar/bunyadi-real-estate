@@ -52,7 +52,11 @@ export default async function AdminInquiriesPage({
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-brand-950">{t("inquiries")}</h1>
         <form method="get" className="flex items-center gap-2">
+          <label htmlFor="status" className="text-sm font-medium text-brand-700">
+            {tCommon("status")}
+          </label>
           <select
+            id="status"
             name="status"
             defaultValue={sp.status ?? ""}
             className={`${fieldSelectClass} w-auto`}
@@ -61,7 +65,9 @@ export default async function AdminInquiriesPage({
             <option value="NEW">{tTable("new")}</option>
             <option value="COMPLETED">{tTable("completed")}</option>
           </select>
-          <Button type="submit">{tFilters("apply")}</Button>
+          <Button type="submit" className="whitespace-nowrap">
+            {tFilters("apply")}
+          </Button>
         </form>
       </div>
 
