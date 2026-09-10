@@ -46,7 +46,10 @@ export default function Footer() {
           </h3>
           {/* Tappable on mobile — calling is the highest-intent action on a
               property site, and these were plain text. */}
-          <ul className="mt-4 space-y-2 text-sm text-brand-100">
+          {/* break-words so a long address or email (one unbreakable token)
+              wraps instead of forcing this grid column — and the page — wider
+              than the viewport. */}
+          <ul className="mt-4 space-y-2 break-words text-sm text-brand-100">
             <li>
               <address className="not-italic">{t("address")}</address>
             </li>

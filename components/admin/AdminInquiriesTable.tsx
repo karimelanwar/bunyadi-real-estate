@@ -75,7 +75,9 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
           {error}
         </p>
       )}
-      <div className="overflow-x-auto rounded-2xl border border-brand-100 bg-white shadow-card">
+      {/* See AdminPropertiesTable: `relative` keeps absolutely positioned
+          descendants inside the scroll container. */}
+      <div className="relative overflow-x-auto rounded-2xl border border-brand-100 bg-white shadow-card">
       <table className="w-full min-w-[840px] text-start text-sm">
         <thead className="bg-brand-50/60 text-xs uppercase tracking-wide text-brand-700">
           <tr>

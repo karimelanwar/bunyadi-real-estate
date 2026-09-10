@@ -31,7 +31,10 @@ export default function WizardSteps({
           const reachable = index <= furthest;
 
           return (
-            <li key={step.id} className="flex-1">
+            // min-w-0 lets the item shrink past its label's min-content width;
+            // without it the row overflows and the `truncate` below never
+            // engages, pushing the page sideways at tablet widths.
+            <li key={step.id} className="min-w-0 flex-1">
               <button
                 type="button"
                 onClick={() => reachable && onSelect(index)}

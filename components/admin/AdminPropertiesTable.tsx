@@ -88,7 +88,10 @@ export default function AdminPropertiesTable({ properties }: { properties: Prope
         </p>
       )}
 
-      <div className="overflow-x-auto rounded-2xl border border-brand-100 bg-white shadow-card">
+      {/* `relative` makes this the containing block for anything absolutely
+          positioned inside, so overflow-x-auto can actually clip it instead of
+          letting it stretch the page. */}
+      <div className="relative overflow-x-auto rounded-2xl border border-brand-100 bg-white shadow-card">
         <table className="w-full min-w-[1000px] text-start text-sm">
           <thead className="bg-brand-50/60 text-xs uppercase tracking-wide text-brand-700">
             <tr>
@@ -134,11 +137,14 @@ export default function AdminPropertiesTable({ properties }: { properties: Prope
                     <StatusBadge status={property.status} />
                   </td>
                   <td className="px-4 py-3">
-                    <label className="sr-only" htmlFor={`availability-${property.id}`}>
-                      {t("filterAvailability")}
-                    </label>
+                    {/* aria-label rather than an sr-only <label>: sr-only is
+                        position:absolute, and inside this horizontally
+                        scrolling table its containing block is the <body>, so
+                        overflow-x-auto could not clip it — each row's label
+                        escaped the wrapper and stretched the page ~215px wide
+                        on mobile. */}
                     <select
-                      id={`availability-${property.id}`}
+                      aria-label={t("filterAvailability")}
                       value={property.availability}
                       disabled={busy}
                       onChange={(e) =>
