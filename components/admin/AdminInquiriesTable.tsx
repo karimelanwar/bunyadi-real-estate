@@ -31,6 +31,7 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   // Derived, not stored: after router.refresh() the dialog picks up the new
   // status on its own, and a deleted inquiry simply stops resolving — which
@@ -42,7 +43,14 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (selected && !dialog.open) dialog.showModal();
+    if (selected && !dialog.open) {
+      dialog.showModal();
+      // Without this, showModal() auto-focuses the first focusable
+      // descendant — the phone number link — which then shows the site's
+      // green focus ring around it and reads as an accidental selection.
+      // The title is a more sensible, and more accessible, first stop.
+      titleRef.current?.focus();
+    }
     if (!selected && dialog.open) dialog.close();
   }, [selected]);
 
@@ -195,7 +203,16 @@ export default function AdminInquiriesTable({ inquiries }: { inquiries: InquiryR
           <div className="flex flex-col gap-5 p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 id="inquiry-dialog-title" className="text-lg font-bold text-brand-950">
+                {/* tabIndex + ref so it can take initial focus programmatically
+                    (see the effect above) without joining the tab order;
+                    outline-none because a focus ring only matters here for
+                    where focus lands, not as an interactive affordance. */}
+                <h2
+                  ref={titleRef}
+                  id="inquiry-dialog-title"
+                  tabIndex={-1}
+                  className="text-lg font-bold text-brand-950 outline-none"
+                >
                   {selected.name}
                 </h2>
                 <p className="mt-0.5 text-xs text-brand-500">{selected.dateFormatted}</p>
