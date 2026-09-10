@@ -18,6 +18,7 @@ import {
 import ImageGallery from "@/components/ImageGallery";
 import InquiryForm from "@/components/InquiryForm";
 import PropertyCard from "@/components/PropertyCard";
+import { buttonClass } from "@/components/ui/Button";
 import BedIcon from "@/components/icons/BedIcon";
 import BathIcon from "@/components/icons/BathIcon";
 import AreaIcon from "@/components/icons/AreaIcon";
@@ -65,6 +66,7 @@ export default async function PropertyDetailPage({
   const tCommon = await getTranslations("common");
   const tAvail = await getTranslations("availability");
   const tTenure = await getTranslations("tenure");
+  const tFooter = await getTranslations("footer");
 
   const hasStats =
     detail.bedrooms !== null ||
@@ -219,6 +221,18 @@ export default async function PropertyDetailPage({
                   propertyId={detail.id}
                   submitLabel={closed ? t("registerInterest") : undefined}
                 />
+              </div>
+
+              <div className="mt-4 border-t border-brand-100 pt-4 text-center">
+                <p className="text-xs text-brand-600">
+                  {t("orCallUs", { phone: tFooter("phone") })}
+                </p>
+                <a
+                  href={`tel:${tFooter("phone").replace(/[^+\d]/g, "")}`}
+                  className={buttonClass({ variant: "secondary", className: "mt-2 w-full" })}
+                >
+                  {t("callUs")}
+                </a>
               </div>
             </div>
           </div>

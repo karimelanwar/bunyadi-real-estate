@@ -157,6 +157,8 @@
     "overview": "Overview",
     "contactAgent": "Interested in this property?",
     "contactAgentSubtitle": "Send us a message and our team will get back to you shortly.",
+    "callUs": "Call us",
+    "orCallUs": "Prefer to talk? Call {phone}",
     "relatedTitle": "Similar properties",
     "shareProperty": "Share this property",
     "reference": "Reference",
@@ -193,7 +195,7 @@
     "categories": "Categories",
     "contact": "Contact",
     "address": "Add your office address here",
-    "phone": "+44 20 0000 0000",
+    "phone": "+44 7380 808075",
     "email": "info@bunyadirealestate.com",
     "rights": "All rights reserved.",
     "admin": "Admin"
