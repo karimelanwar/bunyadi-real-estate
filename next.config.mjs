@@ -23,6 +23,22 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    // AVIF first, WebP second: Next picks per the browser's Accept header and
+    // falls back to the original for anything that supports neither. AVIF is
+    // typically 20-30% smaller than WebP on photographs, which is all this
+    // site serves.
+    formats: ["image/avif", "image/webp"],
+    // How long an optimized variant stays fresh. The default is 60 seconds,
+    // which makes the server re-encode the same image over and over. Property
+    // photos come through /api/uploads/* which already sends its own
+    // immutable one-year header (Next honours the longer upstream value), so
+    // this mainly covers static images like the hero. 30 days rather than a
+    // year because these URLs have no content hash: if you replace a file in
+    // public/ with the same name, already-cached browsers keep the old one
+    // until this expires. Give a replacement a new filename to bust it.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+  },
   async headers() {
     return [
       {

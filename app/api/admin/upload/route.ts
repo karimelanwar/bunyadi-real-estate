@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/require-admin";
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import sharp from "sharp";
 import type { PropertyImage } from "@prisma/client";
 import { propertyUploadDir, propertyImageUrl } from "@/lib/uploads";
 
@@ -18,6 +19,52 @@ const EXT_BY_TYPE: Record<string, string> = {
   "image/webp": "webp",
   "image/gif": "gif",
 };
+
+// Nothing on the site displays an image wider than roughly 2500px (the widest
+// is the property gallery at 66vw, which on a 1920px screen at 2x asks for
+// ~2530px), so anything beyond this is bytes nobody ever sees. A phone photo
+// straight off a camera is commonly 4000px+ and several MB: storing that
+// as-is means the optimizer has to decode the whole thing the first time each
+// size variant is requested, and it sits on the paid Render disk forever.
+const MAX_STORED_EDGE = 2560;
+
+/**
+ * Shrink an uploaded photo to something reasonable before it hits disk.
+ * Returns the original bytes untouched if anything goes wrong — a failed
+ * resize should never cost the admin their upload.
+ */
+async function downscale(buffer: Buffer, ext: string): Promise<Buffer> {
+  // GIFs are skipped: re-encoding one flattens it to a single frame, and a
+  // property listing has no reason to need an animated image anyway.
+  if (ext === "gif") return buffer;
+
+  try {
+    const pipeline = sharp(buffer)
+      // Must come before metadata is dropped: phone cameras record portrait
+      // shots as landscape plus an EXIF orientation flag, so baking the
+      // rotation in is what stops them appearing on their side once that
+      // flag is stripped.
+      .rotate()
+      .resize({
+        width: MAX_STORED_EDGE,
+        height: MAX_STORED_EDGE,
+        fit: "inside",
+        withoutEnlargement: true,
+      });
+
+    const out =
+      ext === "png"
+        ? await pipeline.png({ compressionLevel: 9 }).toBuffer()
+        : ext === "webp"
+          ? await pipeline.webp({ quality: 82 }).toBuffer()
+          : await pipeline.jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+
+    // A small, already-optimised file can come out bigger than it went in.
+    return out.length < buffer.length ? out : buffer;
+  } catch {
+    return buffer;
+  }
+}
 
 export async function POST(request: NextRequest) {
   const { response } = await requireAdmin();
@@ -66,7 +113,7 @@ export async function POST(request: NextRequest) {
     const filename = `${randomUUID()}.${ext}`;
     const filePath = path.join(uploadDir, filename);
     const buffer = Buffer.from(await file.arrayBuffer());
-    await fs.writeFile(filePath, buffer);
+    await fs.writeFile(filePath, await downscale(buffer, ext));
 
     const url = propertyImageUrl(propertyId, filename);
     const image = await prisma.propertyImage.create({
