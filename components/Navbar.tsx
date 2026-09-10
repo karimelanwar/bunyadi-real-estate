@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 
@@ -36,13 +35,14 @@ export default function Navbar() {
         className="container-page flex h-20 items-center justify-between gap-4"
       >
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          <Image
-            src="/logo.png"
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
+          <img
+            src="/logo.svg"
             alt="Bunyadi Real Estate"
-            width={500}
-            height={88}
-            priority
-            className="h-11 w-auto object-contain sm:h-12"
+            width={576}
+            height={100}
+            fetchPriority="high"
+            className="h-10 w-auto object-contain sm:h-11"
           />
         </Link>
 

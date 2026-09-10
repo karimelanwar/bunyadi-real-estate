@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
@@ -55,13 +54,14 @@ export default function AdminSidebar() {
   return (
     <>
       <header className="flex items-center justify-between border-b border-brand-800 bg-brand-950 px-4 py-3 lg:hidden">
-        <Image
-          src="/logo.png"
+        {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
+        <img
+          src="/logo.svg"
           alt="Bunyadi Real Estate"
-          width={375}
-          height={66}
-          priority
-          className="h-11 w-auto shrink-0 object-contain brightness-0 invert"
+          width={576}
+          height={100}
+          fetchPriority="high"
+          className="h-10 w-auto shrink-0 object-contain brightness-0 invert"
         />
         <button
           type="button"
@@ -91,13 +91,14 @@ export default function AdminSidebar() {
 
       <aside className="hidden w-72 shrink-0 flex-col bg-brand-950 lg:flex">
         <div className="flex h-20 items-center justify-center border-b border-brand-800 px-3">
-          <Image
-            src="/logo.png"
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
+          <img
+            src="/logo.svg"
             alt="Bunyadi Real Estate"
-            width={250}
-            height={44}
-            priority
-            className="h-11 w-auto shrink-0 object-contain brightness-0 invert"
+            width={576}
+            height={100}
+            fetchPriority="high"
+            className="h-10 w-auto shrink-0 object-contain brightness-0 invert"
           />
         </div>
 

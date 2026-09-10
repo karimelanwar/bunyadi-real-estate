@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import LoginForm from "./LoginForm";
 
 export const metadata: Metadata = { title: "Admin Login" };
@@ -9,13 +8,13 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-brand-950 px-4 py-12">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         <div className="mb-6 flex justify-center">
-          <Image
-            src="/logo.png"
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
+          <img
+            src="/logo.svg"
             alt="Bunyadi Real Estate"
-            width={318}
-            height={56}
-            priority
-            className="h-14 w-auto shrink-0 object-contain"
+            width={576}
+            height={100}
+            className="h-12 w-auto shrink-0 object-contain"
           />
         </div>
         <LoginForm />

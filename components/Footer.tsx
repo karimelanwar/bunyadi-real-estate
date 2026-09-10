@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -11,12 +10,13 @@ export default function Footer() {
     <footer className="border-t border-brand-50 bg-brand-950 text-brand-50">
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
-          <Image
-            src="/logo.png"
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
+          <img
+            src="/logo.svg"
             alt="Bunyadi Real Estate"
-            width={500}
-            height={88}
-            className="h-12 w-auto object-contain brightness-0 invert"
+            width={576}
+            height={100}
+            className="h-11 w-auto object-contain brightness-0 invert"
           />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-100">
             {t("about")}

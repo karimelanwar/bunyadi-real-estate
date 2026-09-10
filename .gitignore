@@ -37,11 +37,6 @@ yarn-error.log*
 /.qa
 /undefined
 
-# Original source images. The served copies live in public/ — these root-level
-# originals are byte-identical duplicates and would ship ~1.2MB for nothing.
-/IMG_2467.png
-/logo.png
-/favicon.png
 
 # uploads (admin-uploaded property images; public/uploads/seed/* is
 # committed placeholder content and intentionally not ignored here)

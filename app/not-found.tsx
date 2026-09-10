@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
 // Deliberately uses a plain <a> instead of next-intl's <Link>: this file
@@ -13,7 +12,8 @@ export default async function NotFound() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-white px-4 text-center">
-      <Image src="/logo.png" alt="Bunyadi Real Estate" width={312} height={55} className="h-8 w-auto object-contain" />
+      {/* eslint-disable-next-line @next/next/no-img-element -- SVG doesn't need next/image's raster optimization */}
+      <img src="/logo.svg" alt="Bunyadi Real Estate" width={576} height={100} className="h-8 w-auto object-contain" />
       <div>
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-500">404</p>
         <h1 className="mt-2 text-3xl font-bold text-brand-950 sm:text-4xl">{t("title")}</h1>
