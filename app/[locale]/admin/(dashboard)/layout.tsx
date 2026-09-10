@@ -18,9 +18,15 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-sand-50 lg:flex-row">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-sand-50 lg:flex-row">
       <AdminSidebar />
-      <div className="flex-1 p-4 sm:p-6 lg:p-10">{children}</div>
+      {/* min-w-0 is load-bearing: without it, a flex item can't shrink below
+          its content's intrinsic width, so the wide tables on the
+          Properties/Inquiries pages (min-w-[1000px]/[840px]) push this whole
+          column wider than the viewport instead of scrolling inside their
+          own overflow-x-auto wrapper — the symptom is stray horizontal
+          scroll / blank space on mobile. */}
+      <div className="min-w-0 flex-1 p-4 sm:p-6 lg:p-10">{children}</div>
     </div>
   );
 }

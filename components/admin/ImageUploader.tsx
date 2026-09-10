@@ -187,7 +187,7 @@ export default function ImageUploader({
               } ${busyId === image.id ? "opacity-50" : ""}`}
             >
               <div className="relative aspect-square">
-                <Image src={image.url} alt="" fill sizes="200px" className="object-cover object-top" />
+                <Image src={image.url} alt="" fill sizes="200px" className="object-cover object-bottom" />
               </div>
 
               {image.isCover && (
