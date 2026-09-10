@@ -33,7 +33,7 @@ export default function PropertyCard({ property }: { property: PropertyCardData 
             alt=""
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className={`object-cover object-bottom transition-transform duration-300 group-hover:scale-105 motion-reduce:transform-none ${
+            className={`object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:transform-none ${
               closed ? "opacity-75 saturate-50" : ""
             }`}
           />

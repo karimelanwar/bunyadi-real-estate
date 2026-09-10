@@ -113,7 +113,7 @@ export default function AdminPropertiesTable({ properties }: { properties: Prope
                             src={property.coverImage}
                             alt=""
                             fill
-                            className="object-cover object-bottom"
+                            className="object-cover"
                             sizes="64px"
                           />
                         )}
